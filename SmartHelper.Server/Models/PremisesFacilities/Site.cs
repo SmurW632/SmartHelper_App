@@ -23,5 +23,7 @@
         public string? ClassHazardObject { get; set; }
         public SiteCharacteristic? SiteCharacteristic { get; set; }
         public AdditionalSiteCharacterestic? AdditionalSiteCharacterestic { get; set; }
+        public InfrastructureDetails? InfrastructureDetails { get; set; }
+        public SiteInfrastructure? SiteInfrastructure { get; set; }
     }
 }
