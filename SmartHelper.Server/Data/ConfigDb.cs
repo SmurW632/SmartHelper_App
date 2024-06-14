@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SmartHelper.Server.Models.PremisesAndFacilities;
 
 namespace SmartHelper.Server.Data
 {
     public class ConfigDb
     {
-        private static DbContextOptions<SmarthelperDbContext>? _options;
+        private static DbContextOptions<>? _options;
 
         public void StartDb()
         {
@@ -17,14 +16,14 @@ namespace SmartHelper.Server.Data
             var config = builder.Build();
             string? connectionString = config.GetConnectionString("DefaultConnection");
 
-            var optionsBuilder = new DbContextOptionsBuilder<SmarthelperDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<>();
             var options = optionsBuilder.UseNpgsql(connectionString).Options;
 
             _options = options;
             
         }
 
-        public DbContextOptions<SmarthelperDbContext> Options
+        public DbContextOptions<> Options
         {
             get { return _options!; }
         }

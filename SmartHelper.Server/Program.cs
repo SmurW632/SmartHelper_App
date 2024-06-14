@@ -10,11 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 var configDb = new ConfigDb();
 configDb.StartDb();
 
-using (ApplicationDbContext db = new ApplicationDbContext(configDb.Options))
-{
-    
-}
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
