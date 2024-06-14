@@ -80,10 +80,6 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.Response).HasColumnName("response");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.User).WithOne(p => p.AuthRequestHistory)
-                .HasForeignKey<AuthRequestHistory>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("auth_request_history_user_id_fkey");
         });
 
         modelBuilder.Entity<AuthUser>(entity =>
@@ -138,6 +134,11 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.WebsiteOrganization)
                 .HasColumnType("character varying")
                 .HasColumnName("website_organization");
+
+            entity.HasOne(d => d.AuthRequestHistory).WithOne(p => p.User)
+                .HasForeignKey<AuthRequestHistory>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("auth_request_history_user_id_fkey");
         });
 
         modelBuilder.Entity<SAdditionalSiteCharacteristic>(entity =>
@@ -180,11 +181,7 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.SiteId).HasColumnName("site_id");
             entity.Property(e => e.UrbanCharacteristicsAndLimitations).HasColumnName("urban_characteristics_and_limitations");
             entity.Property(e => e.UrbanPlanningDocument).HasColumnName("urban_planning_document");
-
-            entity.HasOne(d => d.Site).WithMany()
-                .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+                        
         });
 
         modelBuilder.Entity<SGasSupply>(entity =>
@@ -198,10 +195,10 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnName("gas_supply_id");
             entity.Property(e => e.SiteId).HasColumnName("site_id");
 
-            entity.HasOne(d => d.Site).WithMany(p => p.SGasSupplies)
-                .HasForeignKey(d => d.SiteId)
+            entity.HasOne(d => d.SInfrastructure).WithOne(d => d.GasSupply)
+                .HasForeignKey<SGasSupply>(d => d.GasSupplyId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_gas_supply_site_id_fkey");
+                .HasConstraintName("s_gas_supply_infrastructure_id_fkey");
         });
 
         modelBuilder.Entity<SHeatSupply>(entity =>
@@ -215,10 +212,10 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnName("heat_supply_id");
             entity.Property(e => e.SiteId).HasColumnName("site_id");
 
-            entity.HasOne(d => d.Site).WithMany(p => p.SHeatSupplies)
-                .HasForeignKey(d => d.SiteId)
+            entity.HasOne(d => d.SInfrastructure).WithOne(d => d.HeatSupply)
+                .HasForeignKey<SHeatSupply>(d => d.HeatSupplyId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_heat_supply_site_id_fkey");
+                .HasConstraintName("s_gas_supply_infrastructure_id_fkey");
         });
 
         modelBuilder.Entity<SInfrastructure>(entity =>
@@ -253,31 +250,7 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnName("transportation_tariff");
             entity.Property(e => e.WaterDisposalId).HasColumnName("water_disposal_id");
             entity.Property(e => e.WaterSupplyId).HasColumnName("water_supply_id");
-
-            entity.HasOne(d => d.GasSupply).WithMany()
-                .HasForeignKey(d => d.GasSupplyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_infrastructures_gas_supply_id_fkey");
-
-            entity.HasOne(d => d.HeatSupply).WithMany()
-                .HasForeignKey(d => d.HeatSupplyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_infrastructures_heat_supply_id_fkey");
-
-            entity.HasOne(d => d.PowerSupply).WithMany()
-                .HasForeignKey(d => d.PowerSupplyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_infrastructures_power_supply_id_fkey");
-
-            entity.HasOne(d => d.WaterDisposal).WithMany()
-                .HasForeignKey(d => d.WaterDisposalId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_infrastructures_water_disposal_id_fkey");
-
-            entity.HasOne(d => d.WaterSupply).WithMany()
-                .HasForeignKey(d => d.WaterSupplyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_infrastructures_water_supply_id_fkey");
+                        
         });
 
         modelBuilder.Entity<SPowerSupply>(entity =>
@@ -291,8 +264,8 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnName("power_supply_id");
             entity.Property(e => e.SiteId).HasColumnName("site_id");
 
-            entity.HasOne(d => d.Site).WithMany(p => p.SPowerSupplies)
-                .HasForeignKey(d => d.SiteId)
+            entity.HasOne(d => d.SInfrastructure).WithOne(d=> d.PowerSupply)
+                .HasForeignKey<SPowerSupply>(d => d.PowerSupplyId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_power_supply_site_id_fkey");
         });
@@ -351,10 +324,10 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnName("water_disposal_id");
             entity.Property(e => e.SiteId).HasColumnName("site_id");
 
-            entity.HasOne(d => d.Site).WithMany(p => p.SWaterDisposals)
-                .HasForeignKey(d => d.SiteId)
+            entity.HasOne(d => d.SInfrastructure).WithOne(d => d.WaterDisposal)
+                .HasForeignKey<SWaterDisposal>(d => d.WaterDisposalId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_water_disposal_site_id_fkey");
+                .HasConstraintName("s_power_supply_site_id_fkey");
         });
 
         modelBuilder.Entity<SWaterSupply>(entity =>
@@ -368,10 +341,10 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnName("water_supply_id");
             entity.Property(e => e.SiteId).HasColumnName("site_id");
 
-            entity.HasOne(d => d.Site).WithMany(p => p.SWaterSupplies)
-                .HasForeignKey(d => d.SiteId)
+            entity.HasOne(d => d.SInfrastructure).WithOne(d => d.WaterSupply)
+                .HasForeignKey<SWaterSupply>(d => d.WaterSupplyId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_water_supply_site_id_fkey");
+                .HasConstraintName("s_power_supply_site_id_fkey");
         });
 
         modelBuilder.Entity<Site>(entity =>
@@ -437,6 +410,47 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.TypeSite)
                 .HasColumnType("character varying")
                 .HasColumnName("type_site");
+
+            entity.HasOne(d => d.TasLocation).WithOne(d => d.Site)
+                .HasForeignKey<TasLocationObject>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("location_object_fkey");
+
+            entity.HasOne(d => d.SAdditionalSiteCharacteristic).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
+            entity.HasOne(d => d.SGasSupplies).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
+            entity.HasOne(d => d.SHeatSupply).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
+            entity.HasOne(d => d.SPowerSupply).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
+            entity.HasOne(d => d.SSiteCharacteristic).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
+            entity.HasOne(d => d.SWaterDisposably).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
+            entity.HasOne(d => d.SWaterSupply).WithOne(d => d.Site)
+                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+
         });
 
         modelBuilder.Entity<SpNpa>(entity =>
@@ -454,10 +468,6 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.Requisites).HasColumnName("requisites");
             entity.Property(e => e.SupportMeasuresId).HasColumnName("support_measures_id");
 
-            entity.HasOne(d => d.SupportMeasures).WithMany()
-                .HasForeignKey(d => d.SupportMeasuresId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("sp_npa_support_measures_id_fkey");
         });
 
         modelBuilder.Entity<SpSubmissionOfDocument>(entity =>
@@ -474,10 +484,6 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.RequirementsForApplicant).HasColumnName("requirements_for_applicant");
             entity.Property(e => e.SupportMeasuresId).HasColumnName("support_measures_id");
 
-            entity.HasOne(d => d.SupportMeasures).WithMany()
-                .HasForeignKey(d => d.SupportMeasuresId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("sp_submission_of_documents_support_measures_id_fkey");
         });
 
         modelBuilder.Entity<SpSupportMeasure>(entity =>
@@ -515,6 +521,16 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.TypeSupport)
                 .HasColumnType("character varying")
                 .HasColumnName("type_support");
+
+            entity.HasOne(d=>d.SpNpa).WithOne(d=>d.SupportMeasures)
+                .HasForeignKey<SpNpa>(d=>d.SupportMeasuresId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("sp_support_measures_fkey");
+
+            entity.HasOne(d => d.SpSubmissionOfDocument).WithOne(d => d.SupportMeasures)
+                .HasForeignKey<SpSubmissionOfDocument>(d => d.SupportMeasuresId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("sp_support_measures_withSubmission_fkey");
         });
 
         modelBuilder.Entity<TasAdministrativeCenter>(entity =>
@@ -531,10 +547,6 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("title_administration");
 
-            entity.HasOne(d => d.TechnoparksAndSez).WithMany()
-                .HasForeignKey(d => d.TechnoparksAndSezId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tas_administrative_centers_technoparks_and_sez_id_fkey");
         });
 
         modelBuilder.Entity<TasDescriptionObject>(entity =>
@@ -551,10 +563,6 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.ListIndustry).HasColumnName("list_industry");
             entity.Property(e => e.TechnoparksAndSezId).HasColumnName("technoparks_and_sez_id");
 
-            entity.HasOne(d => d.TechnoparksAndSez).WithMany()
-                .HasForeignKey(d => d.TechnoparksAndSezId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tas_description_objects_technoparks_and_sez_id_fkey");
         });
 
         modelBuilder.Entity<TasFinance>(entity =>
@@ -580,11 +588,6 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.TransportTax)
                 .HasColumnType("character varying")
                 .HasColumnName("transport_tax");
-
-            entity.HasOne(d => d.TechnoparksAndSez).WithMany()
-                .HasForeignKey(d => d.TechnoparksAndSezId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tas_finance_technoparks_and_sez_id_fkey");
         });
 
         modelBuilder.Entity<TasLocationObject>(entity =>
@@ -608,15 +611,6 @@ public partial class SmarthelperDbContext : DbContext
             entity.Property(e => e.SiteId).HasColumnName("site_id");
             entity.Property(e => e.TechnoparksAndSezId).HasColumnName("technoparks_and_sez_id");
 
-            entity.HasOne(d => d.Site).WithMany()
-                .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tas_location_objects_site_id_fkey");
-
-            entity.HasOne(d => d.TechnoparksAndSez).WithMany()
-                .HasForeignKey(d => d.TechnoparksAndSezId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tas_location_objects_technoparks_and_sez_id_fkey");
         });
 
         modelBuilder.Entity<TasTechnoparksAndSez>(entity =>
@@ -671,6 +665,28 @@ public partial class SmarthelperDbContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("validity_period");
             entity.Property(e => e.YearOfFormation).HasColumnName("year_of_formation");
+
+            entity.HasOne(d => d.TasAdministrativeCenter).WithOne(d => d.TechnoparksAndSez)
+                .HasForeignKey<TasTechnoparksAndSez>(d => d.TechnoparksAndSezId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("administrative_fkey");
+
+            entity.HasOne(d => d.TasDescription).WithOne(d => d.TechnoparksAndSez)
+                .HasForeignKey<TasTechnoparksAndSez>(d => d.TechnoparksAndSezId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("description_fkey");
+
+            entity.HasOne(d => d.TasFinance).WithOne(d => d.TechnoparksAndSez)
+                .HasForeignKey<TasTechnoparksAndSez>(d => d.TechnoparksAndSezId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("finance_fkey");
+
+            entity.HasOne(d => d.TasLocation).WithOne(d => d.TechnoparksAndSez)
+                .HasForeignKey<TasTechnoparksAndSez>(d => d.TechnoparksAndSezId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("location_fkey");
+
+
         });
 
         OnModelCreatingPartial(modelBuilder);

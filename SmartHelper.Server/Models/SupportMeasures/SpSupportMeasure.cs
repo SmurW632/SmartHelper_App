@@ -26,4 +26,7 @@ public partial class SpSupportMeasure
     public string LimitTypeActivity { get; set; } = null!;
 
     public string? EntryIntoRegisterSme { get; set; }
+
+    public virtual SpNpa? SpNpa { get; set; }
+    public virtual SpSubmissionOfDocument? SpSubmissionOfDocument { get; set; }
 }
