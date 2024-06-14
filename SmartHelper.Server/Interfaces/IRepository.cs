@@ -3,8 +3,8 @@
     public interface IRepository<T>
     {
         public T GetById(int id);
-        public void Add(T entity);
-        public void Update(T entity);
-        public void Delete(T entity);
+        public bool Add(T entity);
+        public bool Update(T entity);
+        public bool Delete(T entity);
     }
 }

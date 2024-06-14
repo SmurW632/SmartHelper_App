@@ -5,31 +5,47 @@ namespace SmartHelper.Server.Data.Repositories
 {
     public class AuthUserRepository : IRepository<AuthUser>
     {
-        private static SmarthelperDbContext _db;
+        public bool Add(AuthUser entity)
+        {
+            if(entity == null) return false;
 
-        public AuthUserRepository()
-        {
-            _db = new SmarthelperDbContext();
-        }
-        public void Add(AuthUser entity)
-        {
-            _db.AuthUsers.Add(entity);
-            _db.SaveChanges();
+            using SmarthelperDbContext db = new();
+
+            db.AuthUsers.Add(entity);
+            db.SaveChanges();
+            return true;
         }
 
-        public void Delete(AuthUser entity)
+        public bool Delete(AuthUser entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) return false;
+
+            using SmarthelperDbContext db = new();
+
+            db.AuthUsers.Remove(entity);
+            db.SaveChanges();
+            return true;
         }
 
         public AuthUser GetById(int id)
         {
-            throw new NotImplementedException();
+            using SmarthelperDbContext db = new();
+
+            var user = db.AuthUsers.FirstOrDefault(u => u.UserId == id);
+            if (user == null) return null!;
+
+            return user;
         }
 
-        public void Update(AuthUser entity)
+        public bool Update(AuthUser entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) return false;
+
+            using SmarthelperDbContext db = new();
+
+            db.Update(entity);
+            db.SaveChanges();
+            return true;
         }
     }
 }
