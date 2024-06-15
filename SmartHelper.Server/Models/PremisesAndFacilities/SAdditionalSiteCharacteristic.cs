@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartHelper.Server.Models.PremisesAndFacilities;
 
 public partial class SAdditionalSiteCharacteristic
 {
+    [Key]
+    public int Id { get; set; }
     public int? SiteId { get; set; }
 
     public string? ExportTkoAvailability { get; set; }

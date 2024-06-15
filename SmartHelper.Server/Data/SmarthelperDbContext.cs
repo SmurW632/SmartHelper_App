@@ -29,8 +29,6 @@ public partial class SmarthelperDbContext : DbContext
 
     public virtual DbSet<SHeatSupply> SHeatSupplies { get; set; }
 
-    public virtual DbSet<SInfrastructure> SInfrastructures { get; set; }
-
     public virtual DbSet<SPowerSupply> SPowerSupplies { get; set; }
 
     public virtual DbSet<SSiteCharacteristic> SSiteCharacteristics { get; set; }
@@ -144,8 +142,9 @@ public partial class SmarthelperDbContext : DbContext
         modelBuilder.Entity<SAdditionalSiteCharacteristic>(entity =>
         {
             entity
-                .HasNoKey()
-                .ToTable("s_additional_site_characteristics");
+                .HasKey(e => e.Id).HasName("SAdditionalSiteCharacteristicId");
+
+            entity.ToTable("s_additional_site_characteristics");
 
             entity.Property(e => e.AvailabilityAccessRoads)
                 .HasColumnType("character varying")
@@ -187,18 +186,12 @@ public partial class SmarthelperDbContext : DbContext
         modelBuilder.Entity<SGasSupply>(entity =>
         {
             entity.HasKey(e => e.GasSupplyId).HasName("s_gas_supply_pkey");
-
             entity.ToTable("s_gas_supply");
-
             entity.Property(e => e.GasSupplyId)
                 .UseIdentityAlwaysColumn()
                 .HasColumnName("gas_supply_id");
-            entity.Property(e => e.SiteId).HasColumnName("site_id");
 
-            entity.HasOne(d => d.SInfrastructure).WithOne(d => d.GasSupply)
-                .HasForeignKey<SGasSupply>(d => d.GasSupplyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_gas_supply_infrastructure_id_fkey");
+            entity.Property(e => e.SiteId).HasColumnName("site_id");
         });
 
         modelBuilder.Entity<SHeatSupply>(entity =>
@@ -216,41 +209,6 @@ public partial class SmarthelperDbContext : DbContext
                 .HasForeignKey<SHeatSupply>(d => d.HeatSupplyId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_gas_supply_infrastructure_id_fkey");
-        });
-
-        modelBuilder.Entity<SInfrastructure>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("s_infrastructures");
-
-            entity.Property(e => e.Availability)
-                .HasColumnType("character varying")
-                .HasColumnName("availability");
-            entity.Property(e => e.Bandwidth)
-                .HasColumnType("character varying")
-                .HasColumnName("bandwidth");
-            entity.Property(e => e.ConsumptionTariff)
-                .HasColumnType("character varying")
-                .HasColumnName("consumption_tariff");
-            entity.Property(e => e.FreePower)
-                .HasColumnType("character varying")
-                .HasColumnName("free_power");
-            entity.Property(e => e.GasSupplyId).HasColumnName("gas_supply_id");
-            entity.Property(e => e.HeatSupplyId).HasColumnName("heat_supply_id");
-            entity.Property(e => e.MaximumAllowableCapacity)
-                .HasColumnType("character varying")
-                .HasColumnName("maximum_allowable_capacity");
-            entity.Property(e => e.OtherCharacteristics)
-                .HasColumnType("character varying")
-                .HasColumnName("other_characteristics");
-            entity.Property(e => e.PowerSupplyId).HasColumnName("power_supply_id");
-            entity.Property(e => e.TransportationTariff)
-                .HasColumnType("character varying")
-                .HasColumnName("transportation_tariff");
-            entity.Property(e => e.WaterDisposalId).HasColumnName("water_disposal_id");
-            entity.Property(e => e.WaterSupplyId).HasColumnName("water_supply_id");
-                        
         });
 
         modelBuilder.Entity<SPowerSupply>(entity =>
@@ -272,9 +230,9 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<SSiteCharacteristic>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("s_site_characteristics");
+            entity.HasKey(e => e.Id).HasName("site_characteristic_id");
+
+            entity.ToTable("s_site_characteristics");
 
             entity.HasIndex(e => e.InnAdministrator, "s_site_characteristics_inn_administrator_key").IsUnique();
 
@@ -419,35 +377,35 @@ public partial class SmarthelperDbContext : DbContext
             entity.HasOne(d => d.SAdditionalSiteCharacteristic).WithOne(d => d.Site)
                 .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
+                .HasConstraintName("s_additional_site_id_fkey");
 
             entity.HasOne(d => d.SGasSupplies).WithOne(d => d.Site)
-                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .HasForeignKey<SGasSupply>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
 
             entity.HasOne(d => d.SHeatSupply).WithOne(d => d.Site)
-                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .HasForeignKey<SHeatSupply>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
 
             entity.HasOne(d => d.SPowerSupply).WithOne(d => d.Site)
-                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .HasForeignKey<SPowerSupply>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
 
             entity.HasOne(d => d.SSiteCharacteristic).WithOne(d => d.Site)
-                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .HasForeignKey<SSiteCharacteristic>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
 
             entity.HasOne(d => d.SWaterDisposably).WithOne(d => d.Site)
-                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .HasForeignKey<SWaterDisposal>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
 
             entity.HasOne(d => d.SWaterSupply).WithOne(d => d.Site)
-                .HasForeignKey<SAdditionalSiteCharacteristic>(d => d.SiteId)
+                .HasForeignKey<SWaterSupply>(d => d.SiteId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("s_additional_site_characteristics_site_id_fkey");
 
@@ -455,9 +413,9 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<SpNpa>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("sp_npa");
+            entity.HasKey(e => e.SpNpaId).HasName("spnap_id");
+
+            entity.ToTable("sp_npa");
 
             entity.Property(e => e.DownloadTheNpa)
                 .HasColumnType("character varying")
@@ -472,9 +430,9 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<SpSubmissionOfDocument>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("sp_submission_of_documents");
+            entity.HasKey(e => e.Id).HasName("submission_id");
+            
+            entity.ToTable("sp_submission_of_documents");
 
             entity.Property(e => e.ApplicationProcedure).HasColumnName("application_procedure");
             entity.Property(e => e.LinkToApplicationForm)
@@ -535,9 +493,8 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<TasAdministrativeCenter>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tas_administrative_centers");
+            entity.HasKey(e => e.Id).HasName("administrative_id");
+            entity.ToTable("tas_administrative_centers");
 
             entity.Property(e => e.AddressAdministration)
                 .HasColumnType("character varying")
@@ -551,9 +508,8 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<TasDescriptionObject>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tas_description_objects");
+            entity.HasKey(e => e.Id).HasName("description_id");
+            entity.ToTable("tas_description_objects");
 
             entity.Property(e => e.AdditionalServicesMngCompany).HasColumnName("additional_services_mng_company");
             entity.Property(e => e.AvailabilityFreeCustomsZoneRegime)
@@ -567,9 +523,9 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<TasFinance>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tas_finance");
+            entity.HasKey(e => e.Id).HasName("finance_id");
+
+            entity.ToTable("tas_finance");
 
             entity.Property(e => e.IncomeTax)
                 .HasColumnType("character varying")
@@ -592,9 +548,9 @@ public partial class SmarthelperDbContext : DbContext
 
         modelBuilder.Entity<TasLocationObject>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tas_location_objects");
+            entity.HasKey(e => e.Id).HasName("location_id");
+
+            entity.ToTable("tas_location_objects");
 
             entity.Property(e => e.Coordinates)
                 .HasColumnType("character varying")

@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace SmartHelper.Server.Controllers
 {
+    public class NlpRequest
+    {
+        public string Text { get; set; }
+    }
+
     public class HomeController : Controller
     {
+
         // GET: HomeController
         public ActionResult Index()
         {
@@ -55,7 +64,7 @@ namespace SmartHelper.Server.Controllers
             }
             catch
             {
-                
+
                 return View();
             }
         }

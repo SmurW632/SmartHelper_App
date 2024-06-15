@@ -5,6 +5,7 @@ namespace SmartHelper.Server.Models.TechnoparkAndSez;
 
 public partial class TasFinance
 {
+    public int Id { get; set; }
     public int? TechnoparksAndSezId { get; set; }
 
     public string IncomeTax { get; set; } = null!;
