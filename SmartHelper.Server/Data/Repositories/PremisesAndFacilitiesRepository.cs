@@ -36,11 +36,17 @@ namespace SmartHelper.Server.Data.Repositories
                 .Include(p => p.SPowerSupply)
                 .Include(p => p.SWaterDisposably)
                 .Include(p => p.SWaterSupply)
-                .FirstOrDefaultAsync(p => p.SiteId == id);
+                .FirstOrDefaultAsync(p => p.SiteId == id) ?? throw new ArgumentNullException(nameof(id));
         }
        
         public async Task<List<Site>> SearchSite(List<string> listOkved)
         {
+            //return await _db.Sites
+            //.Include(p => p.SAdditionalSiteCharacteristic)
+            //.Where(p => p.SAdditionalSiteCharacteristic != null
+            // && listOkved.Any(c => p.SAdditionalSiteCharacteristic.ListTypesEconomicActivities.Contains(c)))
+            //.ToListAsync();
+
             return await _db.Sites
                 .Include(p => p.SSiteCharacteristic)
                 .Include(p => p.SAdditionalSiteCharacteristic)

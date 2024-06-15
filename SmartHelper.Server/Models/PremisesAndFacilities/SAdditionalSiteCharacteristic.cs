@@ -6,15 +6,14 @@ namespace SmartHelper.Server.Models.PremisesAndFacilities;
 
 public partial class SAdditionalSiteCharacteristic
 {
-    [Key]
-    public int Id { get; set; }
+    public int AdditionalSiteCharacteristicsId { get; set; }
     public int? SiteId { get; set; }
 
     public string? ExportTkoAvailability { get; set; }
 
     public string? ExportTkoTariffRubTon { get; set; }
 
-    public float? ExportTkoTariffRubCub { get; set; }
+    public string? ExportTkoTariffRubCub { get; set; }
 
     public string? AvailabilityAccessRoads { get; set; }
 

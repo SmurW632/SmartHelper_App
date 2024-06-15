@@ -12,9 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 SmarthelperDbContext db = new SmarthelperDbContext();
 IRepository<AuthUser> userRepository = new AuthUserRepository();
 var sites = new PremisesAndFacilitiesRepository(db);
-var site = sites.GetById(1).Result;
-Console.WriteLine(site);
-
+var list = new List<string>() { "33", "19" };
+var site = sites.SearchSite(list).Result;
+int count = 0;
+foreach (var item in site)
+{
+    count++;
+    Console.WriteLine(item);
+}
+Console.WriteLine(count);
 var enginepythonscript = new EngineModelPython();
 enginepythonscript.StartScript();
 
