@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartHelper.Server.Models.PremisesAndFacilities;
 
 public partial class SSiteCharacteristic
 {
+    public int SiteCharacteristicsId { get; set; }
     public int? SiteId { get; set; }
 
     public string? CharacteristicsCapitalConstructionFacilitiesLocated { get; set; }
 
-    public float? FreeLandPlot { get; set; }
+    public string? FreeLandPlot { get; set; }
 
     public string? CadastrolNumber { get; set; }
 
@@ -19,7 +21,7 @@ public partial class SSiteCharacteristic
 
     public string? CategoryLand { get; set; }
 
-    public int? FreeArea { get; set; }
+    public string? FreeArea { get; set; }
 
     public string? CadastralNumber { get; set; }
 

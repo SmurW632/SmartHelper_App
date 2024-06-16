@@ -5,6 +5,7 @@ namespace SmartHelper.Server.Models.TechnoparkAndSez;
 
 public partial class TasDescriptionObject
 {
+    public int Id { get; set; }
     public int? TechnoparksAndSezId { get; set; }
 
     public string ListIndustry { get; set; } = null!;

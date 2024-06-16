@@ -6,6 +6,7 @@ namespace SmartHelper.Server.Models.TechnoparkAndSez;
 
 public partial class TasLocationObject
 {
+    public int Id { get; set; }
     public int? TechnoparksAndSezId { get; set; }
 
     public int? SiteId { get; set; }

@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartHelper.Server.Models.PremisesAndFacilities;
 
 public partial class SAdditionalSiteCharacteristic
 {
+    public int AdditionalSiteCharacteristicsId { get; set; }
     public int? SiteId { get; set; }
 
     public string? ExportTkoAvailability { get; set; }
 
     public string? ExportTkoTariffRubTon { get; set; }
 
-    public float? ExportTkoTariffRubCub { get; set; }
+    public string? ExportTkoTariffRubCub { get; set; }
 
     public string? AvailabilityAccessRoads { get; set; }
 

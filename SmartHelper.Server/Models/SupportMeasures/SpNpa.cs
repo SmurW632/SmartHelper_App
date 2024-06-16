@@ -5,6 +5,7 @@ namespace SmartHelper.Server.Models.SupportMeasures;
 
 public partial class SpNpa
 {
+    public int SpNpaId { get; set; }
     public int? SupportMeasuresId { get; set; }
 
     public string Requisites { get; set; } = null!;

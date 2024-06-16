@@ -4,13 +4,25 @@ using SmartHelper.Server.Data;
 using SmartHelper.Server.Data.Repositories;
 using SmartHelper.Server.Interfaces;
 using SmartHelper.Server.Models.Auth;
+using SmartHelper.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+SmarthelperDbContext db = new SmarthelperDbContext();
 IRepository<AuthUser> userRepository = new AuthUserRepository();
-
+var sites = new PremisesAndFacilitiesRepository(db);
+var list = new List<string>() { "33", "19" };
+var site = sites.SearchSite(list).Result;
+int count = 0;
+foreach (var item in site)
+{
+    count++;
+    Console.WriteLine(item);
+}
+Console.WriteLine(count);
+var enginepythonscript = new EngineModelPython();
+enginepythonscript.StartScript();
 
 var user1 = new AuthUser
 {
@@ -29,7 +41,7 @@ var user1 = new AuthUser
     TypeOfIndustry = "Technology",
 };
 
-userRepository.Add(user1);
+//userRepository.Add(user1);
 
 
 builder.Services.AddControllers();

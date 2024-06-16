@@ -40,4 +40,9 @@ public partial class TasTechnoparksAndSez
     public string RestrictionsTypeActivity { get; set; } = null!;
 
     public string HowBecomeResident { get; set; } = null!;
+
+    public virtual TasAdministrativeCenter? TasAdministrativeCenter { get; set; }
+    public virtual TasDescriptionObject? TasDescription { get; set; }
+    public virtual TasFinance? TasFinance { get; set; }
+    public virtual TasLocationObject? TasLocation { get; set; }
 }

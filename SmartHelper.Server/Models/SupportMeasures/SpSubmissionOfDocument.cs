@@ -5,6 +5,7 @@ namespace SmartHelper.Server.Models.SupportMeasures;
 
 public partial class SpSubmissionOfDocument
 {
+    public int Id { get; set; }
     public int? SupportMeasuresId { get; set; }
 
     public string LinkToApplicationForm { get; set; } = null!;
